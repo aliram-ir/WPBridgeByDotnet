@@ -1,0 +1,11 @@
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\bin\Debug\net8.0\WPBridge.Client.deps.json
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\bin\Debug\net8.0\WPBridge.Client.dll
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\bin\Debug\net8.0\WPBridge.Client.pdb
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.AssemblyInfoInputs.cache
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.AssemblyInfo.cs
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.csproj.CoreCompileInputs.cache
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.dll
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\refint\WPBridge.Client.dll
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\WPBridge.Client.pdb
+D:\Projects\CSharp\WPBridge.NET\WPBridge.Client\obj\Debug\net8.0\ref\WPBridge.Client.dll
