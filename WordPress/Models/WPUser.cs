@@ -1,26 +1,29 @@
 ﻿using System.Text.Json.Serialization;
-using WPBridge.Client.WooCommerce.Models;
 
-public class WPUser
+namespace WPBridge.Client.WordPress.Models
 {
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public class WPUser
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
 
-    [JsonPropertyName("username")]
-    public string Username { get; set; } = string.Empty;
+        [JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
 
-    [JsonPropertyName("name")]
-    public string Name { get; set; } = string.Empty;
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
 
-    [JsonPropertyName("email")]
-    public string Email { get; set; } = string.Empty;
+        [JsonPropertyName("name")]
+        public string DisplayName { get; set; } = string.Empty;
 
-    [JsonPropertyName("phone")]
-    public string Phone { get; set; } = string.Empty;
+        [JsonPropertyName("first_name")]
+        public string FirstName { get; set; } = string.Empty;
 
-    [JsonPropertyName("billing")]
-    public WooBillingAddress Billing { get; set; } = new();
+        [JsonPropertyName("last_name")]
+        public string LastName { get; set; } = string.Empty;
 
-    [JsonPropertyName("shipping")]
-    public WooShippingAddress Shipping { get; set; } = new();
+        // Meta data is often nested in WordPress responses
+        [JsonPropertyName("meta")]
+        public Dictionary<string, object>? Meta { get; set; }
+    }
 }
