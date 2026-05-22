@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace WPBridge.Client.WooCommerce.Models
 {
@@ -7,121 +8,77 @@ namespace WPBridge.Client.WooCommerce.Models
     /// </summary>
     public class WooProduct
     {
-        /// <summary>
-        /// Product identifier.
-        /// </summary>
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Product name.
-        /// </summary>
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product slug.
-        /// </summary>
+        [JsonPropertyName("slug")]
         public string Slug { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product type (simple, variable, grouped, external).
-        /// </summary>
+        [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product status.
-        /// </summary>
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product description.
-        /// </summary>
+        [JsonPropertyName("description")]
         public string Description { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Short description.
-        /// </summary>
+        [JsonPropertyName("short_description")]
         public string ShortDescription { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Product price.
-        /// </summary>
+        [JsonPropertyName("price")]
         public string Price { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Regular price.
-        /// </summary>
+        [JsonPropertyName("regular_price")]
         public string RegularPrice { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Sale price.
-        /// </summary>
+        [JsonPropertyName("sale_price")]
         public string SalePrice { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Indicates whether the product is purchasable.
-        /// </summary>
+        [JsonPropertyName("purchasable")]
         public bool Purchasable { get; set; }
 
-        /// <summary>
-        /// Indicates whether the product is in stock.
-        /// </summary>
+        [JsonPropertyName("in_stock")]
         public bool InStock { get; set; }
 
-        /// <summary>
-        /// Product images.
-        /// </summary>
+        [JsonPropertyName("images")]
         public List<WooProductImage> Images { get; set; } = new();
 
-        /// <summary>
-        /// Product categories.
-        /// </summary>
+        [JsonPropertyName("categories")]
         public List<WooProductCategory> Categories { get; set; } = new();
+
+        // اضافه کردن این فیلد برای جلوگیری از خطا در پاسخ‌های حجیم ووکامرس
+        [JsonPropertyName("meta_data")]
+        public object? MetaData { get; set; }
     }
 
-    /// <summary>
-    /// Represents a WooCommerce product image.
-    /// </summary>
     public class WooProductImage
     {
-        /// <summary>
-        /// Image identifier.
-        /// </summary>
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Image URL.
-        /// </summary>
+        [JsonPropertyName("src")]
         public string Src { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Image name.
-        /// </summary>
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Alternative text for the image.
-        /// </summary>
+        [JsonPropertyName("alt")]
         public string Alt { get; set; } = string.Empty;
     }
 
-    /// <summary>
-    /// Represents a WooCommerce product category.
-    /// </summary>
     public class WooProductCategory
     {
-        /// <summary>
-        /// Category identifier.
-        /// </summary>
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Category name.
-        /// </summary>
+        [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        /// <summary>
-        /// Category slug.
-        /// </summary>
+        [JsonPropertyName("slug")]
         public string Slug { get; set; } = string.Empty;
     }
 }

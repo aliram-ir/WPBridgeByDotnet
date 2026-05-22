@@ -5,7 +5,10 @@ namespace WPBridge.WooCommerce.Services
 {
     public class WooCommerceService : BaseApiService
     {
-        public WooCommerceService(HttpClient httpClient) : base(httpClient) { }
+        public WooCommerceService(HttpClient httpClient, string consumerKey, string consumerSecret) : base(httpClient)
+        {
+            SetBasicAuth(consumerKey, consumerSecret);
+        }
 
         // Customer Registration (Create)
         public async Task<WooCustomer?> CreateCustomerAsync(WooCustomerRequest request)
