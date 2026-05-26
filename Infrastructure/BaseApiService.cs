@@ -1,10 +1,15 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
 namespace WPBridge.Client.Infrastructure
 {
+    /// <summary>
+    /// Base class for all API services providing core HTTP functionality and error handling.
+    /// Updated to bypass SSL certificate validation for development environments.
+    /// </summary>
     public abstract class BaseApiService
     {
         protected readonly HttpClient _httpClient;
@@ -14,16 +19,7 @@ namespace WPBridge.Client.Infrastructure
         {
             _httpClient = httpClient;
 
-            // Enforce modern security protocols
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls13;
-
-            // Add User-Agent to avoid being blocked by WordPress security plugins
-            if (!_httpClient.DefaultRequestHeaders.Contains("User-Agent"))
-            {
-                _httpClient.DefaultRequestHeaders.Add("User-Agent", "WPBridge-Client/1.0");
-            }
-
-            // Ensuring we handle case-insensitive and camelCase naming policies
+            // Standard JSON configuration
             _jsonOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
@@ -31,13 +27,23 @@ namespace WPBridge.Client.Infrastructure
             };
         }
 
-        protected void SetBasicAuth(string consumerKey, string consumerSecret)
+        // Static factory method or shared handler configuration to bypass SSL
+        public static HttpClientHandler GetInsecureHandler()
+        {
+            return new HttpClientHandler
+            {
+                // This bypasses SSL certificate validation errors (UntrustedRoot, Expired, etc.)
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            };
+        }
+
+        public void SetBasicAuth(string consumerKey, string consumerSecret)
         {
             var authString = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{consumerKey}:{consumerSecret}"));
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authString);
         }
 
-        protected void SetAuthToken(string token)
+        public void SetAuthToken(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
@@ -54,49 +60,26 @@ namespace WPBridge.Client.Infrastructure
                     request.Content = new StringContent(json, Encoding.UTF8, "application/json");
                 }
 
-                // Execute the request
+                var fullUri = new Uri(_httpClient.BaseAddress!, endpoint);
+                Debug.WriteLine($"--- API REQUEST: {method} {fullUri} ---");
+
                 var response = await _httpClient.SendAsync(request);
-
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    Console.WriteLine("API Warning: Unauthorized access.");
-                    return default;
-                }
-
                 var content = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine($"--- API RESPONSE: {(int)response.StatusCode} ---");
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"API Error Response ({response.StatusCode}): {content}");
+                    Debug.WriteLine($"Error Body: {content}");
                     return default;
                 }
 
-                return JsonSerializer.Deserialize<T>(content, _jsonOptions);
-            }
-            catch (HttpRequestException httpEx)
-            {
-                // Detailed logging for network diagnostics
-                Console.WriteLine($"--- NETWORK CONNECTION ERROR ---");
-                Console.WriteLine($"Message: {httpEx.Message}");
-                if (httpEx.InnerException != null)
-                {
-                    Console.WriteLine($"Inner Exception: {httpEx.InnerException.Message}");
-                }
-                return default;
-            }
-            catch (TaskCanceledException)
-            {
-                Console.WriteLine("API Error: The request timed out.");
-                return default;
-            }
-            catch (JsonException jEx)
-            {
-                Console.WriteLine($"JSON Deserialization Error: {jEx.Message}");
-                return default;
+                return string.IsNullOrWhiteSpace(content) ? default : JsonSerializer.Deserialize<T>(content, _jsonOptions);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An unexpected error occurred: {ex.Message}");
+                Debug.WriteLine("--- API EXCEPTION ---");
+                Debug.WriteLine(ex.ToString());
                 return default;
             }
         }
